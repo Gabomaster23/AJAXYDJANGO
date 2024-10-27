@@ -8,7 +8,7 @@ class Estado(models.Model):
 
 class Municipio(models.Model):
     nombre = models.CharField(max_length=100)
-    estado = models.ForeignKey(Estado, on_delete=models.CASCADE, related_name="municipios")
+    estado = models.ForeignKey(Estado, on_delete=models.CASCADE, related_name='municipios')
 
     def __str__(self):
         return self.nombre
