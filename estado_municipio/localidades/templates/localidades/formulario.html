@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Estados y Municipios</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Selecciona un Estado</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="estado">Estado:</label>
+        <select id="estado">
+            <option value="">Selecciona un estado</option>
+            {% for estado in estados %}
+                <option value="{{ estado.id }}">{{ estado.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="municipio">Municipio:</label>
+        <select id="municipio">
+            <option value="">Selecciona un municipio</option>
+        </select>
+    </form>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#estado').change(function() {
+                var estadoId = $(this).val();
+                if (estadoId) {
+                    $.ajax({
+                        url: '/localidades/municipios/' + estadoId + '/',
+                        method: 'GET',
+                        success: function(data) {
+                            $('#municipio').empty();
+                            $('#municipio').append('<option value="">Selecciona un municipio</option>');
+                            $.each(data, function(key, municipio) {
+                                $('#municipio').append('<option value="' + municipio.id + '">' + municipio.nombre + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#municipio').empty();
+                    $('#municipio').append('<option value="">Selecciona un municipio</option>');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
